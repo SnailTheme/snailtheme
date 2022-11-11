@@ -1,0 +1,27 @@
+<IfModule mod_rewrite.c>
+    <IfModule mod_negotiation.c>
+        Options -MultiViews
+    </IfModule>
+
+    RewriteEngine On
+
+    ## ReRoute heroku domain to Custom Domain
+    RewriteCond %{HTTP_HOST} ^snailtheme.herokuapp.com$ [NC]
+    RewriteRule ^(.*)$ http://www.snailtheme.com/$1 [L,R=301,NC]
+    ## ReRoute non-www to www
+    RewriteCond %{HTTP_HOST} ^snailtheme.com [NC]
+    RewriteRule ^(.*)$ http://www.snailtheme.com/$1 [L,R=301,NC]
+
+    # Redirect Trailing Slashes If Not A Folder...
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.*)/$ /$1 [L,R=301]
+
+    # Handle Front Controller...
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^ index.php [L]
+
+    # Handle Authorization Header
+    RewriteCond %{HTTP:Authorization} .
+    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+</IfModule>
